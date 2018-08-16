@@ -1,5 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { createCustomElement } from '@angular/elements';
 
 import { AppComponent } from './app.component';
 
@@ -8,9 +12,21 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  // The bridge between Angular and the Web API.
+  constructor(private injector: Injector) {
+    const el = createCustomElement(AppComponent, {injector});
+    customElements.define('geometry-elements', el);
+  }
+
+  ngDoBootstrap() {}
+
+}
